@@ -7,7 +7,7 @@ const int MIN = 60;
 const int HOUR = (60*60);
 
 const int PULSE_INTERVAL_SEC = 30;
-const int MESSAGE_TIMEOUT = 300000;
+const int MESSAGE_TIMEOUT = 10000;
 const int CLOSE_DISPLAY_TIMEOUT = 1000;
 const int SHOW_CLOCK_TIMEOUT = 5000;
 const int AUTO_REFRESH_TIMEOUT = 1000*(60*5);
@@ -125,7 +125,7 @@ static char* codeToString( bool isStatusCode, int code ) {
 static void endApp(){
   if(fromWakeUp && !autoPulseSuccess) {    
     time_t wakeup_time = time(NULL) + HOUR;
-    wakeup_schedule(wakeup_time, 100, true);
+   //wakeup_schedule(wakeup_time, 100, true);
   }
   window_stack_pop(false);
 }
@@ -426,6 +426,8 @@ static void show_clock_timer_callback(void *context){
 
 static void wakeUpInit(){
   //time_t wakeup_time = time(NULL) + PULSE_INTERVAL_SEC;
+  wakeup_cancel_all();
+
   if( devMode && devRefreshFast ) {
     time_t wakeup_time = time(NULL) + 15;
     wakeup_schedule(wakeup_time, 100, true);
@@ -638,11 +640,11 @@ static void main_window_unload ( Window *window ) {
 static void wakeup_handler(WakeupId id, int32_t reason) {
 //   //Delete persistent storage value
 //   persist_delete(PERSIST_WAKEUP);
-  
+  wakeUpInit();
   text_layer_set_text(s_notice_layer, "\n\n\n\n\nPiA: Sending Pulse!");
   sendMessage(JS_SEND_PULSE);
   layer_set_hidden(text_layer_get_layer(s_notice_layer), false);
-  wakeUpInit();
+  
 }
 
 

@@ -57,7 +57,7 @@ function webPulse(pos) {
   var myAPIKey = Pebble.getWatchToken();
   var url = 'http://darkestmon.100webspace.net/pebble/pia.php?act=pulse&id=' + myAPIKey;
   if(pos)
-    url += '&lat=' + Math.round(pos.coords.latitude) + '&long=' + Math.round(pos.coords.longitude);
+    url += '&lat=' + parseFloat(pos.coords.latitude.toFixed(1)) + '&long=' + parseFloat(pos.coords.longitude.toFixed(1));
   if(requestCode==JS_SEND_PULSE)
     url += '&auto';
 
